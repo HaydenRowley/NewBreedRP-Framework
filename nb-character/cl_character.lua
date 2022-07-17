@@ -92,3 +92,44 @@ RegisterNUICallBack('deleteCharacter', function(data)
     local CharData = data
     TriggerServerEvent('NB-Base:deleteChar', CharData)
 end)
+
+RegisterNetEvent('NB-Base:char:setupChar')
+AddEventHandler('NB-Base:char:setupChar', function()
+    NB.Functions.TriggerServerCallback('NB-Base:GetChar', function(data)
+        SendNUIMessage({type = 'setupCharacters', characters = data})
+    end)
+end)
+
+RegisterNUICallBack('selectCharacter', function(data)
+    local cid = tonumber(data.cid)
+    selectedChar(false)
+    TriggerServerEvent('NB-Base:char:ServerSelect', cid)
+    TriggerEvent('NB-Spawn:openMenu')
+    SetTimecycleModifier('defaut')
+    SetCamActive(cam, false)
+    DestroyCam(cam, false)
+end)
+
+RegisterNUICallBack('ClosedChar', function()
+    selectedChar(false)
+end)
+
+function selectChar(value)
+    SetNuiFocus(value, value)
+    SendNUIMessage({
+        type = 'charSelect',
+        status = value
+    })
+    selectingChar = false
+end
+
+RegisterNetEvent('NB-Base:char:startCam')
+AddEventHandler('NB-Base:char:startCam', function()
+    DoSreenFadeIn(10)
+    SetTimecycleModifier('hud_def_blur')
+    SetTimecycleModifierStrength(1.0)
+    FreezeEntityPosition(GetPlayerPed(-1), true)
+    cam = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", -358.56, -981.96, 286.25, 320.00, 0.00, -50.00, 90.00, false, 0)
+    SetCamActive(cam, true)
+    RenderScriptCams(true, false, 1, true, true)
+end)
