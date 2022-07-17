@@ -43,7 +43,7 @@ NB.Admin.Setup = function(source, identifier)
             NB.Functions.setGroup(selfA, group)
         end
 
-        NB.APlayer[source] = selfA
+        NB.APlayers[source] = selfA
         print(selfA.Data.usergroup)
         ExecuteCommand('add_principal identifier.' .. result[1].identifier .. " group." .. selfA.Data.usergroup)
         print('[NB] ' ..result[1].identifier..', Updated to Group: '..selfA.Data.usergroup.. 'successfully')
